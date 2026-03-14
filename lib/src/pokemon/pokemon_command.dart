@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:args/args.dart';
@@ -27,7 +28,8 @@ class PokemonCommand extends AppCommand {
         help: 'Print pokemon usage information.',
       )
       ..addOption('name', help: 'Name of the Pokémon to look up')
-      ..addOption('base-url', help: 'PokéAPI base URL');
+      ..addOption('base-url', help: 'PokéAPI base URL')
+      ..addOption('output', abbr: 'o', help: 'Save Pokémon data to a JSON file');
   }
 
   @override
@@ -70,6 +72,12 @@ class PokemonCommand extends AppCommand {
     }
 
     _printPokemon(data);
+
+    if (command.wasParsed('output')) {
+      final outputPath = command.option('output')!;
+      _saveToFile(data, outputPath);
+    }
+
     return true;
   }
 
@@ -98,5 +106,12 @@ class PokemonCommand extends AppCommand {
       print('  ${statName.padRight(20)} ${'$baseStat'.padLeft(3)}  $bar');
     }
     print('');
+  }
+
+  void _saveToFile(Map<String, dynamic> data, String path) {
+    final file = File(path);
+    final encoder = JsonEncoder.withIndent('  ');
+    file.writeAsStringSync(encoder.convert(data));
+    print('Saved to: $path');
   }
 }
