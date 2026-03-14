@@ -1,4 +1,5 @@
 import 'package:args/args.dart';
+import 'package:pokedex/pokedex.dart';
 
 const String version = '0.1.0';
 
@@ -16,7 +17,8 @@ ArgParser buildParser() {
       negatable: false,
       help: 'Show additional command output.',
     )
-    ..addFlag('version', negatable: false, help: 'Print the tool version.');
+    ..addFlag('version', negatable: false, help: 'Print the tool version.')
+    ..addCommand(pokemonCommand.name, pokemonCommand.buildParser());
 }
 
 void printUsage(ArgParser argParser) {
@@ -25,12 +27,25 @@ void printUsage(ArgParser argParser) {
   print('Usage: pokedex <command> <arguments>');
   print(argParser.usage);
   print('');
+  print('Commands:');
+  for (final command in argParser.commands.keys) {
+    print('  $command');
+  }
+  print('');
 }
 
 void main(List<String> arguments) {
   final ArgParser argParser = buildParser();
   try {
     final ArgResults results = argParser.parse(arguments);
+    bool verbose = false;
+    if (results.wasParsed('verbose')) {
+      verbose = true;
+    }
+
+    if (verbose) {
+      print('[VERBOSE] All arguments: ${results.arguments}');
+    }
 
     if (results.wasParsed('help') || arguments.isEmpty) {
       printUsage(argParser);
@@ -38,6 +53,11 @@ void main(List<String> arguments) {
     }
     if (results.wasParsed('version')) {
       print('pokedex version: $version');
+      return;
+    }
+
+    if (results.command?.name == pokemonCommand.name) {
+      pokemonCommand.execute(results.command!, verbose);
       return;
     }
 
