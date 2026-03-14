@@ -13,9 +13,7 @@ void main() {
     });
 
     test('loads from environment variable', () {
-      Environment.setInstance(
-        Environment(baseUrl: 'https://env.api.com'),
-      );
+      Environment.setInstance(Environment(baseUrl: 'https://env.api.com'));
 
       final parser = ArgParser()..addOption('base-url');
       final results = parser.parse([]);
@@ -24,9 +22,7 @@ void main() {
     });
 
     test('argument takes priority over environment variable', () {
-      Environment.setInstance(
-        Environment(baseUrl: 'https://env.api.com'),
-      );
+      Environment.setInstance(Environment(baseUrl: 'https://env.api.com'));
 
       final parser = ArgParser()..addOption('base-url');
       final results = parser.parse(['--base-url=https://arg.api.com']);

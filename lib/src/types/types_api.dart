@@ -36,8 +36,9 @@ class TypesApi {
     required String baseUrl,
     required String name,
   }) async {
-    final request =
-        GetRequestBuilder('$baseUrl/type/$name').acceptJson().build();
+    final request = GetRequestBuilder(
+      '$baseUrl/type/$name',
+    ).acceptJson().build();
 
     try {
       final response = await httpClient.send(request);

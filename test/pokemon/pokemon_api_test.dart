@@ -7,7 +7,10 @@ void main() {
   group('PokemonApi', () {
     test('getPokemon returns parsed data on success', () async {
       final mockClient = MockClient((request) async {
-        expect(request.url.toString(), 'https://pokeapi.co/api/v2/pokemon/pikachu');
+        expect(
+          request.url.toString(),
+          'https://pokeapi.co/api/v2/pokemon/pikachu',
+        );
         return http.Response(
           '{"id": 25, "name": "pikachu", "height": 4, "weight": 60}',
           200,

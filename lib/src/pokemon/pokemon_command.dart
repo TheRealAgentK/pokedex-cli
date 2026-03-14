@@ -6,9 +6,7 @@ import 'package:pokedex/src/config_props.dart';
 import 'package:pokedex/src/core/app_command.dart';
 import 'package:pokedex/src/pokemon/pokemon_api.dart';
 
-final PokemonCommand pokemonCommand = PokemonCommand(
-  api: PokemonApi.create(),
-);
+final PokemonCommand pokemonCommand = PokemonCommand(api: PokemonApi.create());
 
 class PokemonCommand extends AppCommand {
   const PokemonCommand({required this.api});
@@ -29,7 +27,11 @@ class PokemonCommand extends AppCommand {
       )
       ..addOption('name', help: 'Name of the Pokémon to look up')
       ..addOption('base-url', help: 'PokéAPI base URL')
-      ..addOption('output', abbr: 'o', help: 'Save Pokémon data to a JSON file');
+      ..addOption(
+        'output',
+        abbr: 'o',
+        help: 'Save Pokémon data to a JSON file',
+      );
   }
 
   @override
@@ -46,18 +48,17 @@ class PokemonCommand extends AppCommand {
       exit(2);
     }
 
-    run(command: command, verbose: verbose).then((result) {
-      exit(result ? 0 : 2);
-    }).catchError((e) {
-      print('Error: $e');
-      exit(2);
-    });
+    run(command: command, verbose: verbose)
+        .then((result) {
+          exit(result ? 0 : 2);
+        })
+        .catchError((e) {
+          print('Error: $e');
+          exit(2);
+        });
   }
 
-  Future<bool> run({
-    required ArgResults command,
-    required bool verbose,
-  }) async {
+  Future<bool> run({required ArgResults command, required bool verbose}) async {
     final pokemonName = command.option('name')!.toLowerCase();
     final baseUrl = ConfigProp.baseUrl.load(command);
 
@@ -93,7 +94,8 @@ class PokemonCommand extends AppCommand {
 
     print('');
     print('${name.toUpperCase()} (#$id)');
-    print('${'─' * 30}');
+    final divider = '─' * 30;
+    print(divider);
     print('Type: $types');
     print('Height: ${height / 10} m');
     print('Weight: ${weight / 10} kg');
@@ -103,7 +105,8 @@ class PokemonCommand extends AppCommand {
       final statName = stat['stat']['name'] as String;
       final baseStat = stat['base_stat'] as int;
       final bar = '█' * (baseStat ~/ 5);
-      print('  ${statName.padRight(20)} ${'$baseStat'.padLeft(3)}  $bar');
+      final statStr = '$baseStat'.padLeft(3);
+      print('  ${statName.padRight(20)} $statStr  $bar');
     }
     print('');
   }

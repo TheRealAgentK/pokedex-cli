@@ -38,18 +38,17 @@ class TypesCommand extends AppCommand {
       exit(0);
     }
 
-    run(command: command, verbose: verbose).then((result) {
-      exit(result ? 0 : 2);
-    }).catchError((e) {
-      print('Error: $e');
-      exit(2);
-    });
+    run(command: command, verbose: verbose)
+        .then((result) {
+          exit(result ? 0 : 2);
+        })
+        .catchError((e) {
+          print('Error: $e');
+          exit(2);
+        });
   }
 
-  Future<bool> run({
-    required ArgResults command,
-    required bool verbose,
-  }) async {
+  Future<bool> run({required ArgResults command, required bool verbose}) async {
     final baseUrl = ConfigProp.baseUrl.load(command);
 
     if (verbose) {
@@ -79,9 +78,10 @@ class TypesCommand extends AppCommand {
       return false;
     }
 
+    final divider = '─' * 30;
     print('');
     print('Pokémon Types:');
-    print('${'─' * 30}');
+    print(divider);
     for (final type in types) {
       print('  ${type['name']}');
     }
@@ -98,9 +98,10 @@ class TypesCommand extends AppCommand {
     final typeName = data['name'] as String;
     final pokemon = data['pokemon'] as List;
 
+    final divider = '─' * 30;
     print('');
     print('Type: ${typeName.toUpperCase()}');
-    print('${'─' * 30}');
+    print(divider);
     print('Pokémon (${pokemon.length}):');
     for (final p in pokemon.take(20)) {
       final pokemonName = p['pokemon']['name'] as String;
