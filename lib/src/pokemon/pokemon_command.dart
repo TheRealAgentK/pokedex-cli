@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:args/args.dart';
+import 'package:pokedex/src/config_props.dart';
 import 'package:pokedex/src/core/app_command.dart';
 
 final PokemonCommand pokemonCommand = PokemonCommand();
@@ -20,7 +21,8 @@ class PokemonCommand extends AppCommand {
         negatable: false,
         help: 'Print pokemon usage information.',
       )
-      ..addOption('name', help: 'Name of the Pokémon to look up');
+      ..addOption('name', help: 'Name of the Pokémon to look up')
+      ..addOption('base-url', help: 'PokéAPI base URL');
   }
 
   @override
@@ -38,7 +40,14 @@ class PokemonCommand extends AppCommand {
     }
 
     final pokemonName = command.option('name')!;
+    final baseUrl = ConfigProp.baseUrl.load(command);
+
+    if (verbose) {
+      print('[VERBOSE] base-url: $baseUrl');
+    }
+
     print('Looking up: $pokemonName');
-    print('(API integration coming in the next step!)');
+    print('Using API: $baseUrl');
+    print('(HTTP integration coming in the next step!)');
   }
 }
