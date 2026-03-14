@@ -18,7 +18,8 @@ ArgParser buildParser() {
       help: 'Show additional command output.',
     )
     ..addFlag('version', negatable: false, help: 'Print the tool version.')
-    ..addCommand(pokemonCommand.name, pokemonCommand.buildParser());
+    ..addCommand(pokemonCommand.name, pokemonCommand.buildParser())
+    ..addCommand(typesCommand.name, typesCommand.buildParser());
 }
 
 void printUsage(ArgParser argParser) {
@@ -58,6 +59,11 @@ void main(List<String> arguments) {
 
     if (results.command?.name == pokemonCommand.name) {
       pokemonCommand.execute(results.command!, verbose);
+      return;
+    }
+
+    if (results.command?.name == typesCommand.name) {
+      typesCommand.execute(results.command!, verbose);
       return;
     }
 
